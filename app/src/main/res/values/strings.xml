@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">Annotations</string>
-    <string name="need_help_text">Need help pairing? \nVisit the <annotation type="help_link">Help Center.</annotation></string>
+    <string name="need_help_text">Need help? \nVisit the <annotation type="help_link">Help Center.</annotation></string>
 </resources>
