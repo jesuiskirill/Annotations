@@ -12,6 +12,8 @@ import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import androidx.core.content.ContextCompat
+import com.example.annotations.extensions.openUrl
+import com.example.annotations.extensions.setClickListenerToText
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.snackbar.Snackbar.LENGTH_SHORT
 import kotlinx.android.synthetic.main.activity_main.*
@@ -56,6 +58,33 @@ class MainActivity : AppCompatActivity() {
         textView.apply {
             text = spannableString
             movementMethod = LinkMovementMethod.getInstance()
+        }
+
+        configureMultipleClickTextView()
+    }
+
+    companion object {
+        const val androidStudioTermsAndConditions = "https://developer.android.com/studio/terms"
+        const val googlePrivacyAndPolicy = "https://policies.google.com/privacy?hl=en-US"
+    }
+
+    private fun configureMultipleClickTextView() {
+        val termsAndConditionsKey = "terms_and_conditions"
+        val privacyAndPolicyKey = "privacy_and_policy"
+
+        multipleClicksTextView.setClickListenerToText(this,
+            R.string.terms_and_conditions,
+            listOf(termsAndConditionsKey, privacyAndPolicyKey)
+        ) { selectedText ->
+            when (selectedText) {
+                termsAndConditionsKey -> {
+                    openUrl(androidStudioTermsAndConditions)
+                }
+
+                privacyAndPolicyKey -> {
+                    openUrl(googlePrivacyAndPolicy)
+                }
+            }
         }
     }
 }
