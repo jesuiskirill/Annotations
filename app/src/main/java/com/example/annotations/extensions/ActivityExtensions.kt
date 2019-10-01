@@ -1,7 +1,6 @@
 package com.example.annotations.extensions
 
 import android.app.Activity
-import androidx.core.content.ContextCompat.startActivity
 import android.content.Intent
 import android.net.Uri
 

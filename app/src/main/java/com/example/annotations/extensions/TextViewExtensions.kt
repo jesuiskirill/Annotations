@@ -1,30 +1,26 @@
 package com.example.annotations.extensions
 
-import android.content.Context
 import android.graphics.Typeface
+import android.text.Annotation
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.SpannedString
-import android.text.style.ForegroundColorSpan
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
 import android.view.View
 import android.widget.TextView
 import androidx.annotation.StringRes
-import androidx.core.content.ContextCompat
-import com.example.annotations.TextClickableSpan
-import android.text.Annotation
-import android.text.method.LinkMovementMethod
 
 /**
  * Makes specific text (annotated with annotation tag) clickable.
  *
- * @param context the context is used to get string.
- * @param fullText this is the text from strings.xml where the clickable text is surrounded with
+ * @param fullText this is the StringRes from strings.xml where the clickable text is surrounded with
  * the annotation tags.
- * @param textsKeys the keys of the annotation textsKeys.
- * @param onSelectedText callback that contains the selected key text.
+ * @param annotationsActions list of AnnotationAction instances contains the key of the annotation
+ * and a callback.
  *
  * In case programmer would like to add specific custom color to the clickable text
  * should add new span in spannableString.
@@ -38,25 +34,22 @@ import android.text.method.LinkMovementMethod
  *
  */
 
-fun TextView.setClickListenerToText(
-    context: Context, @StringRes fullText: Int, textsKeys: List<String>,
-    onSelectedText: (text: String) -> Unit
+fun TextView.setClickListenerToText(@StringRes fullText: Int,
+    annotationsActions: List<AnnotationAction>
 ) {
-
     val spannedFullText = context.resources.getText(fullText) as SpannedString
     val spannableString = SpannableString(spannedFullText)
     val annotations = spannedFullText.getSpans(0, spannedFullText.length, Annotation::class.java)
 
-    textsKeys.forEach { clickableText ->
+    annotationsActions.forEach { annotationAction ->
 
-        val clickableSpan = object : TextClickableSpan(clickableText) {
+        val clickableSpan = object : ClickableSpan() {
             override fun onClick(widget: View) {
-                onSelectedText(identifier)
+                annotationAction.action.invoke()
             }
         }
 
-
-        annotations.find { it.value == clickableText }?.let {
+        annotations.find { it.value == annotationAction.annotation }?.let {
             spannableString.apply {
                 setSpan(
                     clickableSpan,
@@ -64,7 +57,6 @@ fun TextView.setClickListenerToText(
                     spannedFullText.getSpanEnd(it),
                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                 )
-
 
                 setSpan(
                     RelativeSizeSpan(1.1f),
@@ -87,5 +79,6 @@ fun TextView.setClickListenerToText(
         text = spannableString
         movementMethod = LinkMovementMethod.getInstance()
     }
-
 }
+
+data class AnnotationAction(val annotation: String, val action: (() -> Unit))

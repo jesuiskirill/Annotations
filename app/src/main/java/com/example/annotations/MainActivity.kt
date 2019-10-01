@@ -12,6 +12,7 @@ import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import androidx.core.content.ContextCompat
+import com.example.annotations.extensions.AnnotationAction
 import com.example.annotations.extensions.openUrl
 import com.example.annotations.extensions.setClickListenerToText
 import com.google.android.material.snackbar.Snackbar
@@ -69,22 +70,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun configureMultipleClickTextView() {
-        val termsAndConditionsKey = "terms_and_conditions"
-        val privacyAndPolicyKey = "privacy_and_policy"
-
-        multipleClicksTextView.setClickListenerToText(this,
-            R.string.terms_and_conditions,
-            listOf(termsAndConditionsKey, privacyAndPolicyKey)
-        ) { selectedText ->
-            when (selectedText) {
-                termsAndConditionsKey -> {
-                    openUrl(androidStudioTermsAndConditions)
-                }
-
-                privacyAndPolicyKey -> {
-                    openUrl(googlePrivacyAndPolicy)
-                }
-            }
+        val termsAndConditionsKey = AnnotationAction("terms_and_conditions") {
+            openUrl(androidStudioTermsAndConditions)
         }
+        val privacyAndPolicyKey = AnnotationAction("privacy_and_policy") {
+            openUrl(googlePrivacyAndPolicy)
+        }
+
+        multipleClicksTextView.setClickListenerToText(R.string.terms_and_conditions,
+            listOf(termsAndConditionsKey, privacyAndPolicyKey))
     }
 }
