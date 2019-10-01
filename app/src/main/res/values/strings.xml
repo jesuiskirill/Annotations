@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Annotations</string>
     <string name="need_help_text">Need help? \nVisit the <annotation type="help_link">Help Center.</annotation></string>
+    <string name="terms_and_conditions">Please review <annotation type="terms_and_conditions">Terms and Conditions</annotation>
+        and <annotation type="privacy_and_policy">Privacy and Policy</annotation> before proceed</string>
 </resources>
